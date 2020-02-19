@@ -49,3 +49,5 @@ for i in 9; do echo $i; sleep $DIALOG_PROGRESS_INFO_TIMEOUT; done | \
   dialog --title "$DIALOG_TITLE" \
          --gauge "So we have an internet connection and the system time will be synced by ntp now. Let's move on!" \
          $DIALOG_HEIGHT $DIALOG_WIDTH
+
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2 number:

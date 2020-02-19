@@ -27,12 +27,78 @@ BOOT_PARTITION=""
 
 
 
-DIALOG_TITLE="Arch Linux Setup"
+DIALOG_BACKTITLE="Arch Linux Setup"
 DIALOG_HEIGHT="15"
 DIALOG_WIDTH="80"
-DIALOG_PROGRESS_INFO_TIMEOUT="5" # time in seconds info screens with no user input will be shown
 
 
+
+# Enable modeline for vim (just for the live environment)
+echo "set modeline" >> /etc/vimrc
+
+
+
+#####----->  HELPER FUNCTIONS
+
+show_info_box() {
+  local DIALOG_STEP_TITLE="$1"
+  local PROGRESS_PERCENTAGE="$2"
+  local INFO_TEXT="$3"
+
+  dialog --backtitle "$DIALOG_BACKTITLE" \
+         --title "$DIALOG_STEP_TITLE (Total progress:  ${PROGRESS_PERCENTAGE}%)" \
+         --ascii-lines \
+         --infobox "\n$INFO_TEXT\n\n\n                       Press any key to continue..." \
+         $DIALOG_HEIGHT $DIALOG_WIDTH
+  read -n 1
+}
+
+show_input_box() {
+  local DIALOG_STEP_TITLE="$1"
+  local PROGRESS_PERCENTAGE="$2"
+  local INFO_TEXT="$3"
+
+  dialog --backtitle "$DIALOG_BACKTITLE" \
+         --title "$DIALOG_STEP_TITLE (Total progress:  ${PROGRESS_PERCENTAGE}%)" \
+         --ascii-lines \
+         --stdout \
+         --no-cancel \
+         --inputbox "\n$INFO_TEXT" \
+         $DIALOG_HEIGHT $DIALOG_WIDTH
+}
+
+show_password_box() {
+  local DIALOG_STEP_TITLE="$1"
+  local PROGRESS_PERCENTAGE="$2"
+  local INFO_TEXT="$3"
+
+  dialog --backtitle "$DIALOG_BACKTITLE" \
+         --title "$DIALOG_STEP_TITLE (Total progress:  ${PROGRESS_PERCENTAGE}%)" \
+         --ascii-lines \
+         --stdout \
+         --no-cancel \
+         --insecure \
+         --passwordbox "\n$INFO_TEXT" \
+         $DIALOG_HEIGHT $DIALOG_WIDTH
+}
+
+show_selection_menu() {
+  local DIALOG_STEP_TITLE="$1"
+  shift
+  local PROGRESS_PERCENTAGE="$1"
+  shift
+  local INFO_TEXT="$1"
+  shift
+  local OPTIONS_LIST="$@"
+
+  dialog --backtitle "$DIALOG_BACKTITLE" \
+         --title "$DIALOG_STEP_TITLE (Total progress:  ${PROGRESS_BASE}%)" \
+         --ascii-lines \
+         --stdout \
+         --menu "\n$INFO_TEXT" \
+         $DIALOG_HEIGHT $DIALOG_WIDTH 0 \
+         ${OPTIONS_LIST}
+}
 
 # Exit with a clear message on failures
 #set -uo pipefail
@@ -41,3 +107,5 @@ DIALOG_PROGRESS_INFO_TIMEOUT="5" # time in seconds info screens with no user inp
 #####  Set up logging  ##### {{{1
 #exec 1> >(tee "stdout.log")
 #exec 2> >(tee "stderr.log")
+
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2 number:

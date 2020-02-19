@@ -18,3 +18,5 @@ mkswap /dev/mapper/main-swap
 
 echo "Creating ext4 file system on the root volume ..."
 mkfs.ext4 /dev/mapper/main-root
+
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2 number:

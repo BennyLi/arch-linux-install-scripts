@@ -11,3 +11,5 @@ cat <<EOF > /mnt/etc/sudoers.d/01_benny
 $user   ALL=(ALL) ALL
 $user   NOPASSWD: /usr/bin/halt,/usr/bin/poweroff,/usr/bin/reboot
 EOF
+
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2 number:

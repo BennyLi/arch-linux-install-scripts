@@ -19,3 +19,5 @@ cryptsetup \
 
 # Open the encrypted partition for following setup
 cryptsetup luksOpen $ENCRYPTION_PARTITION lvm
+
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2 number:

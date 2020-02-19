@@ -18,3 +18,5 @@ echo "KEYMAP=${KEYMAP}" > /mnt/etc/vconsole.conf
 echo "Setting localtime to ${LOCALTIME_ZONE} ..."
 rm --force /mnt/etc/localtime
 arch-chroot /mnt/ ln --symbolic /usr/share/zoneinfo/${LOCALTIME_ZONE} /etc/localtime
+
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2 number:

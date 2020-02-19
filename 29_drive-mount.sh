@@ -13,3 +13,5 @@ mount $BOOT_PARTITION /mnt/boot
 
 echo "Activating the swap volume ..."
 swapon /dev/mapper/main-swap
+
+# vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2 number:
