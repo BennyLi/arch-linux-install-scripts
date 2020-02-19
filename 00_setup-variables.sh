@@ -27,6 +27,12 @@ BOOT_PARTITION=""
 
 
 
+DIALOG_TITLE="Arch Linux Setup"
+DIALOG_HEIGHT="15"
+DIALOG_WIDTH="80"
+DIALOG_PROGRESS_INFO_TIMEOUT="5" # time in seconds info screens with no user input will be shown
+
+
 
 # Exit with a clear message on failures
 #set -uo pipefail

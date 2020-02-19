@@ -1,14 +1,27 @@
 #! /usr/bin/env sh
 
-# Check connectivity
-ping -c 1 8.8.8.8 >> /dev/null
-if [[ "$?" == "0" ]]; then 
-  echo "Already connected to the internet."
+for i in 5; do echo $i; sleep $DIALOG_PROGRESS_INFO_TIMEOUT; done | \
+	dialog --title "$DIALOG_TITLE" \
+	       --gauge "We will now check for internet connectivity ..." \
+	       $DIALOG_HEIGHT $DIALOG_WIDTH
 
-else
-  # Lets connect to the internet
-  wifi=$(dialog --stdout --menu "Do you want to connect via wifi or ethernet?" 0 0 0 0 ethernet 1 wifi) || exit 1
-  if [ "$wifi" == "1" ]; then
+# Check connectivity
+ping -c 5 -t 10 8.8.8.8 | \
+	dialog --title "$DIALOG_TITLE" \
+	       --progressbox "Checking internet connection ..." \
+	       $DIALOG_HEIGHT $DIALOG_WIDTH
+
+
+if [[ "$?" != "0" ]]; then 
+  wifi=$(dialog --title "$DIALOG_TITLE" \
+	        --stdout \
+		--nocancel \
+		--menu "Do you want to connect via wifi or ethernet?" \
+		$DIALOG_HEIGHT $DIALOG_WIDTH 2 \
+	       	0 ethernet \
+		1 wifi)
+
+  if [[ "$wifi" == "1" ]]; then
     wifi-menu
   else
     interfaces=$(ip -o link | awk '{ gsub(":","",$1); gsub(":","",$2); print $2 " " $1 }')
@@ -16,11 +29,23 @@ else
     dhcpcd $interface
   fi
   
-  # Check connectivity
-  ping -c 1 8.8.8.8 >> /dev/null
-  [[ "$?" == "0" ]] || ( echo "No network connection! Please try again..."; exit 1; )
+  ping -c 5 -t 10 8.8.8.8 | \
+  	dialog --title "$DIALOG_TITLE" \
+  	       --progressbox "Checking internet connection again ..." \
+  	       $DIALOG_HEIGHT $DIALOG_WIDTH
+  [[ "$?" == "0" ]] || \
+  ( 
+    dialog --title "$DIALOG_TITLE" \
+	   --msgbox "Could not connect to the internet. Please make sure you can connect to the internet and try to run the install scripts again." \
+  	   $DIALOG_HEIGHT $DIALOG_WIDTH
+    exit 1
+  )
 fi
 
 
-# Setup clock
 timedatectl set-ntp true
+
+for i in 9; do echo $i; sleep $DIALOG_PROGRESS_INFO_TIMEOUT; done | \
+  dialog --title "$DIALOG_TITLE" \
+         --gauge "So we have an internet connection and the system time will be synced by ntp now. Let's move on!" \
+         $DIALOG_HEIGHT $DIALOG_WIDTH
