@@ -1,8 +1,8 @@
 #! /usr/bin/env sh
 
-dialog --title "$DIALOG_TITLE" \
-       --msgbox "First of all we will setup your keyboard layout to the configured value, which is $KEYMAP" \
-       $DIALOG_HEIGHT $DIALOG_WIDTH
+PROGRESS_PERCENTAGE=1
+
+show_info_box "Keyboard Setup" $PROGRESS_PERCENTAGE "First of all we will setup your keyboard layout to the configured value, which is\n\n * $KEYMAP"
 
 
 # Load the key for your country

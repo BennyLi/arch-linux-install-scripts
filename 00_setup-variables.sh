@@ -53,6 +53,18 @@ show_info_box() {
   read -n 1
 }
 
+show_progress_box() {
+  local DIALOG_STEP_TITLE="$1"
+  local PROGRESS_PERCENTAGE="$2"
+  local INFO_TEXT="$3"
+
+  dialog --backtitle "$DIALOG_BACKTITLE" \
+         --title "$DIALOG_STEP_TITLE (Total progress:  ${PROGRESS_PERCENTAGE}%)" \
+         --ascii-lines \
+         --progressbox "\n$INFO_TEXT" \
+         $DIALOG_HEIGHT $DIALOG_WIDTH
+}
+
 show_input_box() {
   local DIALOG_STEP_TITLE="$1"
   local PROGRESS_PERCENTAGE="$2"
@@ -92,7 +104,7 @@ show_selection_menu() {
   local OPTIONS_LIST="$@"
 
   dialog --backtitle "$DIALOG_BACKTITLE" \
-         --title "$DIALOG_STEP_TITLE (Total progress:  ${PROGRESS_BASE}%)" \
+         --title "$DIALOG_STEP_TITLE (Total progress:  ${PROGRESS_PERCENTAGE}%)" \
          --ascii-lines \
          --stdout \
          --menu "\n$INFO_TEXT" \
