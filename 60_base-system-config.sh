@@ -1,16 +1,20 @@
 #! /usr/bin/env sh
 
-echo "Setting hostname ..."
+PROGRESS_PERCENTAGE=60
+DIALOG_STEP_TITLE="Basic configuration" 
+
+show_info_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Now we will configure the system and the things like\n\n * The hostname\n * Locales\n * Keymap \n * Localtime"
+
 echo $HOSTNAME > /mnt/etc/hostname
 
-echo "Generating locales ..."
 echo "LANG=${LANG}" > /mnt/etc/locale.conf
 lang_code="$(echo $LANG | sed --extended-regexp --quiet 's/^(.*)\..*/\1/p')"
 sed --in-place \
     --expression="s/^#en_US/en_US/g" \
     --expression="s/^#${lang_code}/${lang_code}/g" \
     /mnt/etc/locale.gen
-arch-chroot /mnt locale-gen
+arch-chroot /mnt locale-gen | \
+  show_progress_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Generating locales ..."
 
 echo "Setting console keyboard layout to ${KEYMAP} ..."
 echo "KEYMAP=${KEYMAP}" > /mnt/etc/vconsole.conf

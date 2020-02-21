@@ -15,12 +15,16 @@ else
 
     PROGRESS_PERCENTAGE=$(( $PROGRESS_PERCENTAGE + 1 ))
   done <<< $( cat << EOF
-pvcreate /dev/mapper/$LUKS_DEVICE_NAME
+pvcreate -ff --yes /dev/mapper/$LUKS_BOOT_DEVICE_NAME
+pvcreate -ff --yes /dev/mapper/$LUKS_DEVICE_NAME
+vgcreate $LUKS_BOOT_VOLUME_GROUP_NAME /dev/mapper/$LUKS_BOOT_DEVICE_NAME
 vgcreate $LUKS_VOLUME_GROUP_NAME /dev/mapper/$LUKS_DEVICE_NAME
+lvcreate --extents 100%FREE --name boot $LUKS_BOOT_VOLUME_GROUP_NAME
 lvcreate --size $ram_size --name swap $LUKS_VOLUME_GROUP_NAME
 lvcreate --extents 100%FREE --name root $LUKS_VOLUME_GROUP_NAME
-mkswap /dev/mapper/${LUKS_DEVICE_NAME}-swap
-mkfs.ext4 /dev/mapper/${LUKS_DEVICE_NAME}-root
+mkfs.ext2 /dev/mapper/${LUKS_BOOT_VOLUME_GROUP_NAME}-boot
+mkfs.ext4 /dev/mapper/${LUKS_VOLUME_GROUP_NAME}-root
+mkswap /dev/mapper/${LUKS_VOLUME_GROUP_NAME}-swap
 EOF
 )
 fi

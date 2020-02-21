@@ -34,17 +34,17 @@ open_boot() {
 encrypt_root() {
   DIALOG_SUBSTEP_TITLE="Encrypt root partition"
 
-  dd if=/dev/urandom of=luks_root_header bs=4M count=1
-  dd if=/dev/urandom of=luks_root_keyfile bs=$ENCRYPTION_KEYSIZE count=1
+  dd if=/dev/urandom of=$LUKS_ROOT_HEADER_FILE bs=4M count=1
+  dd if=/dev/urandom of=$LUKS_ROOT_KEYFILE_FILE bs=$ENCRYPTION_KEYSIZE count=1
 
   cryptsetup \
     --batch-mode \
     --verbose \
     --cipher $ENCRYPTION_TYPE \
     --key-size $ENCRYPTION_KEYSIZE \
-    --header luks_root_header \
+    --header $LUKS_ROOT_HEADER_FILE \
     --type luks2 \
-    luksFormat $ENCRYPTION_PARTITION luks_root_keyfile | \
+    luksFormat $ENCRYPTION_PARTITION $LUKS_ROOT_KEYFILE_FILE | \
       show_progress_box "$DIALOG_STEP_TITLE - $DIALOG_SUBSTEP_TITLE" $PROGRESS_PERCENTAGE "Encrypting the root parition ..."
 }
 
@@ -52,8 +52,8 @@ open_root() {
   DIALOG_SUBSTEP_TITLE="Open root partition"
 
   cryptsetup luksOpen $ENCRYPTION_PARTITION \
-    --header luks_root_header \
-    --key-file luks_root_keyfile \
+    --header $LUKS_ROOT_HEADER_FILE \
+    --key-file $LUKS_ROOT_KEYFILE_FILE \
     $LUKS_DEVICE_NAME | \
       show_progress_box "$DIALOG_STEP_TITLE - $DIALOG_SUBSTEP_TITLE" $PROGRESS_PERCENTAGE "Opening the encrypted root device ..."
 }

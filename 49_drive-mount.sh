@@ -13,7 +13,7 @@ mount /dev/mapper/${LUKS_VOLUME_GROUP_NAME}-root /mnt
 mkdir /mnt/efi
 mount $EFI_PARTITION /mnt/efi
 mkdir /mnt/boot
-mount /dev/mapper/$LUKS_BOOT_DEVICE_NAME /mnt/boot
+mount /dev/mapper/${LUKS_BOOT_VOLUME_GROUP_NAME}-boot /mnt/boot
 swapon /dev/mapper/${LUKS_VOLUME_GROUP_NAME}-swap
 EOF
 )

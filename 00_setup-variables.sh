@@ -1,10 +1,8 @@
 #! /usr/bin/env sh
 
-# Redirect everything to a log file
-&>> ~/install.log
-
-# Variable that hold fixed values
 DEBUG=false # if true no data will be changed
+# TODO
+VERBOSE=false # if true less dialogs are shown
 
 KEYMAP="de-latin1-nodeadkeys"
 LANG="de_DE.UTF-8"
@@ -17,9 +15,12 @@ PACKAGE_MIRROR_PROTOCOL="https"
 ENCRYPTION_TYPE="aes-xts-plain"
 ENCRYPTION_KEYSIZE="512"
 ENCRYPTION_PASSPHRASE=""
+LUKS_ROOT_HEADER_FILE="/tmp/luks_root_header"
+LUKS_ROOT_KEY_FILE="/tmp/luks_root_keyfile"
 LUKS_BOOT_DEVICE_NAME="luks_boot"
-LUKS_DEVICE_NAME="luks_root"
-LUKS_VOLUME_GROUP_NAME="luks_vg_main"
+LUKS_BOOT_VOLUME_GROUP_NAME="vg_boot"
+LUKS_DEVICE_NAME="luks_main"
+LUKS_VOLUME_GROUP_NAME="vg_main"
 
 # Variable that will be set in the setup process
 HOSTNAME=""

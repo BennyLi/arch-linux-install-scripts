@@ -17,19 +17,19 @@ source ./00_setup-variables.sh
 
 source ./10_user-input.sh
 
-source ./20_drive-preperation.sh
-source ./30_drive-encryption.sh
-source ./40_drive-partitioning.sh
+#source ./20_drive-preperation.sh
+#source ./30_drive-encryption.sh
+#source ./40_drive-partitioning.sh
 # TODO
 #source ./25_usb-pendrive-backup.sh
-source ./49_drive-mount.sh
-exit 0
+#source ./49_drive-mount.sh
 
-source ./50_package-repo-setup.sh
-source ./51_package-base.sh
+#source ./50_package-repo-setup.sh
+#source ./51_package-base.sh
 
 source ./60_base-system-config.sh
 source ./61_user-setup.sh
+exit 0
 
 source ./70_boot-configuration.sh
 

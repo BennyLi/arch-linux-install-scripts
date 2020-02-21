@@ -1,15 +1,20 @@
 #! /usr/bin/env sh
 
-arch-chroot /mnt useradd --create-home --user-group --shell /usr/bin/zsh --groups wheel,uucp,video,audio,storage,optical,games,input "$user"
+PROGRESS_PERCENTAGE=61
+DIALOG_STEP_TITLE="User setup" 
+
+show_info_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "In this step the user will be added using your provided username and password."
+
+arch-chroot /mnt useradd --create-home --user-group --shell /usr/bin/zsh --groups wheel,uucp,video,audio,storage,optical,games,input "$USERNAME"
 arch-chroot /mnt chsh -s /usr/bin/zsh
 
-echo "$user:$password" | chpasswd --root /mnt
-echo "root:$password" | chpasswd --root /mnt
+echo "$USERNAME:$USER_PASSWORD" | chpasswd --root /mnt
+echo "root:$USER_PASSWORD" | chpasswd --root /mnt
 
 # TODO Move this to the ansible stuff
 cat <<EOF > /mnt/etc/sudoers.d/01_benny
-$user   ALL=(ALL) ALL
-$user   NOPASSWD: /usr/bin/halt,/usr/bin/poweroff,/usr/bin/reboot
+$USERNAME   ALL=(ALL) ALL
+$USERNAME   NOPASSWD: /usr/bin/halt,/usr/bin/poweroff,/usr/bin/reboot
 EOF
 
 # vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2 number:
