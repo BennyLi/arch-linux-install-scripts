@@ -1,17 +1,21 @@
 #! /usr/bin/env sh
 
-echo "Mounting the root volume ..."
-mount /dev/mapper/main-root /mnt
+DIALOG_STEP_TITLE="LUKS device mounting"
+PROGRESS_PERCENTAGE=29
 
-echo "Mounting the EFI partition from the usb stick $EFI_PARTITION ..."
+while IFS= read -r command; do
+  echo "$command" | \
+    show_progress_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Executing $command ..."
+
+  PROGRESS_PERCENTAGE=$(( $PROGRESS_PERCENTAGE + 1 ))
+done <<< $( cat << EOF
+mount /dev/mapper/main-root /mnt
 mkdir /mnt/efi
 mount $EFI_PARTITION /mnt/efi
-
-echo "Mounting the boot partition from the usb stick $BOOT_PARTITION ..."
 mkdir /mnt/boot
 mount $BOOT_PARTITION /mnt/boot
-
-echo "Activating the swap volume ..."
 swapon /dev/mapper/main-swap
+EOF
+)
 
 # vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2 number:

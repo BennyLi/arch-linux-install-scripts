@@ -7,7 +7,7 @@ ram_size=$(free --mebi | awk '/Mem:/ {print $2}')
 
 while IFS= read -r command; do
   echo "$command" | \
-    show_progress_box "$DIALOG_STEP_TITLE - $DIALOG_SUBSTEP_TITLE" $PROGRESS_PERCENTAGE "Executing $command ..."
+    show_progress_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Executing $command ..."
 
   PROGRESS_PERCENTAGE=$(( $PROGRESS_PERCENTAGE + 1 ))
 done <<< $( cat << EOF
