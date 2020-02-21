@@ -14,6 +14,8 @@ PACKAGE_MIRROR_PROTOCOL="https"
 ENCRYPTION_TYPE="aes-xts-plain"
 ENCRYPTION_KEYSIZE="512"
 ENCRYPTION_PASSPHRASE=""
+LUKS_DEVICE_NAME="luks_root"
+LUKS_VOLUME_GROUP_NAME="luks_vg_main"
 
 # Variable that will be set in the setup process
 HOSTNAME=""

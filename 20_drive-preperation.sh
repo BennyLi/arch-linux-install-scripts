@@ -63,13 +63,10 @@ then
         sgdisk --zap-all $USB_KEY
         sgdisk --mbrtogpt $USB_KEY
 
-        sgdisk --new=0:0:512M --type-code 0:EF00 $USB_KEY
+        sgdisk --new=1:0:512M --type-code=1:EF00 --change-name=1:"EFI system partition" $USB_KEY
         mkfs.fat -F32 $EFI_PARTITION
 
-        sgdisk --new=0:0:0 --type-code 0:8300 $USB_KEY
-        echo "$ENCYPTION_PASSPHRASE" > ~/encryption.pass
-        cryptsetup luksFormat $BOOT_PARTITION ~/encryption.pass
-        rm ~/.encrpytion.pass
+        sgdisk --new=2:0:0 --type-code=2:8300 --change-name=2:"Boot and data" $USB_KEY
 EOF
 )
 	fi
