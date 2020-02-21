@@ -1,7 +1,10 @@
 #! /usr/bin/env sh
 
+# Redirect everything to a log file
+&>> ~/install.log
+
 # Variable that hold fixed values
-DEBUG=true # if true no data will be changed
+DEBUG=false # if true no data will be changed
 
 KEYMAP="de-latin1-nodeadkeys"
 LANG="de_DE.UTF-8"
@@ -14,6 +17,7 @@ PACKAGE_MIRROR_PROTOCOL="https"
 ENCRYPTION_TYPE="aes-xts-plain"
 ENCRYPTION_KEYSIZE="512"
 ENCRYPTION_PASSPHRASE=""
+LUKS_BOOT_DEVICE_NAME="luks_boot"
 LUKS_DEVICE_NAME="luks_root"
 LUKS_VOLUME_GROUP_NAME="luks_vg_main"
 
@@ -64,7 +68,7 @@ show_progress_box() {
   dialog --backtitle "$DIALOG_BACKTITLE" \
          --title "$DIALOG_STEP_TITLE (Total progress:  ${PROGRESS_PERCENTAGE}%)" \
          --ascii-lines \
-         --progressbox "\n$INFO_TEXT" \
+         --programbox "\n$INFO_TEXT" \
          $DIALOG_HEIGHT $DIALOG_WIDTH
 }
 
@@ -123,14 +127,9 @@ show_yesno_menu() {
   dialog --backtitle "$DIALOG_BACKTITLE" \
          --title "$DIALOG_STEP_TITLE (Total progress:  ${PROGRESS_PERCENTAGE}%)" \
          --ascii-lines \
+         --defaultno \
          --yesno "\n$INFO_TEXT" \
          $DIALOG_HEIGHT $DIALOG_WIDTH 
-  if [[ "$?" == "0" ]]
-  then
-    echo "Y"
-  else
-    echo "N"
-  fi
 }
 
 # Exit with a clear message on failures

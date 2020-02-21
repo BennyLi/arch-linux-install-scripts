@@ -4,17 +4,17 @@ DIALOG_STEP_TITLE="LUKS device mounting"
 PROGRESS_PERCENTAGE=29
 
 while IFS= read -r command; do
-  echo "$command" | \
+  $command | \
     show_progress_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Executing $command ..."
 
   PROGRESS_PERCENTAGE=$(( $PROGRESS_PERCENTAGE + 1 ))
 done <<< $( cat << EOF
-mount /dev/mapper/main-root /mnt
+mount /dev/mapper/${LUKS_VOLUME_GROUP_NAME}-root /mnt
 mkdir /mnt/efi
 mount $EFI_PARTITION /mnt/efi
 mkdir /mnt/boot
-mount $BOOT_PARTITION /mnt/boot
-swapon /dev/mapper/main-swap
+mount /dev/mapper/$LUKS_BOOT_DEVICE_NAME /mnt/boot
+swapon /dev/mapper/${LUKS_VOLUME_GROUP_NAME}-swap
 EOF
 )
 

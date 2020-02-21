@@ -10,19 +10,19 @@
 
 source ./00_setup-variables.sh
 
-source ./01_intro-screen.sh
+#source ./01_intro-screen.sh
 
-source ./02_keyboard-setup.sh
-source ./05_internet-connect.sh
+#source ./02_keyboard-setup.sh
+#source ./05_internet-connect.sh
 
 source ./10_user-input.sh
 
 source ./20_drive-preperation.sh
-source ./21_drive-encryption.sh
-source ./22_drive-partitioning.sh
+source ./30_drive-encryption.sh
+source ./40_drive-partitioning.sh
 # TODO
 #source ./25_usb-pendrive-backup.sh
-source ./29_drive-mount.sh
+source ./49_drive-mount.sh
 exit 0
 
 source ./50_package-repo-setup.sh

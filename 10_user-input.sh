@@ -67,7 +67,7 @@ show_usb_disk_info() {
 }
 
 show_encryption_password_dialog() {
-  ENCRYPTION_PASSPHRASE=$(show_password_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Enter device encryption password:")
+  ENCRYPTION_PASSPHRASE=$(show_password_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Enter device encryption password (will be asked on boot):")
 }
 
 confirm_encryption_password() {
@@ -106,5 +106,6 @@ get_usb_boot_device
 PROGRESS_PERCENTAGE=$((PROGRESS_PERCENTAGE + 1))
 show_usb_disk_info
 
+while [[ "$ENCRYPTION_PASSPHRASE" == "" ]]; do get_encryption_password; done
 
 # vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2 number:
