@@ -13,6 +13,7 @@ PACKAGE_MIRROR_PROTOCOL="https"
 
 ENCRYPTION_TYPE="aes-xts-plain"
 ENCRYPTION_KEYSIZE="512"
+ENCRYPTION_PASSPHRASE=""
 
 # Variable that will be set in the setup process
 HOSTNAME=""
@@ -110,6 +111,24 @@ show_selection_menu() {
          --menu "\n$INFO_TEXT" \
          $DIALOG_HEIGHT $DIALOG_WIDTH 0 \
          ${OPTIONS_LIST}
+}
+
+show_yesno_menu() {
+  local DIALOG_STEP_TITLE="$1"
+  local PROGRESS_PERCENTAGE="$2"
+  local INFO_TEXT="$3"
+
+  dialog --backtitle "$DIALOG_BACKTITLE" \
+         --title "$DIALOG_STEP_TITLE (Total progress:  ${PROGRESS_PERCENTAGE}%)" \
+         --ascii-lines \
+         --yesno "\n$INFO_TEXT" \
+         $DIALOG_HEIGHT $DIALOG_WIDTH 
+  if [[ "$?" == "0" ]]
+  then
+    echo "Y"
+  else
+    echo "N"
+  fi
 }
 
 # Exit with a clear message on failures

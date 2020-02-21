@@ -66,6 +66,26 @@ show_usb_disk_info() {
   show_info_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Excellent! You selected $USB_KEY as the device where the LUKS header and the boot partition will be stored on.\n\nTwo partitions are created later, if they do not already exists.\n  * The EFI system partition at $EFI_PARTITION\n  * The boot partition at $BOOT_PARTITION"
 }
 
+show_encryption_password_dialog() {
+  ENCRYPTION_PASSPHRASE=$(show_password_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Enter device encryption password:")
+}
+
+confirm_encryption_password() {
+  password_check="0"
+  password_check=$(show_password_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Enter device encryption password again:")
+
+  if [[ "$ENCRYPTION_PASSPHRASE" != "$password_check" ]]
+  then
+    show_info_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "ERROR: The provided passwords did not match! Please try again."
+    ENCRYPTION_PASSPHRASE=""
+  fi
+}
+
+get_encryption_password() {
+  while [[ "$ENCRYPTION_PASSPHRASE" == "" ]]; do show_encryption_password_dialog; done
+  confirm_encryption_password
+}
+
 
 ##### ----- MAIN FUNCTION
 
