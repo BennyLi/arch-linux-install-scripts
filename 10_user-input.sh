@@ -43,7 +43,9 @@ get_install_disk() {
                                        "Please select the medium where Arch Linux should be installed on.\n\nWARNING: THIS DISK WILL BE WIPED COMPLETLY!\nTHIS CANNOT BE UNDONE!\nALL YOUR DATA ON THAT DEVICE WILL BE LOST!\n\nCANCEL IF YOU WISH TO MAKE A BACKUP FIRST!" \
                                        ${devicelist} ) || exit 1
 
-  ENCRYPTION_PARTITION="$(ls ${INSTALL_DEVICE}* | grep -E "^${INSTALL_DEVICE}p?1$")"
+  # Use the whole drive for encryption so nothing is visible at all (even no partitions)
+  ENCRYPTION_PARTITION="$INSTALL_DEVICE"
+  #ENCRYPTION_PARTITION="$(ls ${INSTALL_DEVICE}* | grep -E "^${INSTALL_DEVICE}p?1$")"
 }
 
 show_install_disk_info() {

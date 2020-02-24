@@ -1,8 +1,5 @@
 #! /usr/bin/env sh
 
-clear
-echo "Preperation!"
-
 DIALOG_STEP_TITLE="Drive preperation"
 DIALOG_SUBSTEP_TITLE="Wipe disk"
 PROGRESS_PERCENTAGE=20
@@ -33,8 +30,8 @@ then
 else
   sgdisk --mbrtogpt $INSTALL_DEVICE | \
     show_progress_box "$DIALOG_STEP_TITLE - $DIALOG_SUBSTEP_TITLE" $PROGRESS_PERCENTAGE "Converting disk to GPT format"
-  sgdisk --new=1:0:0 $INSTALL_DEVICE | \
-    show_progress_box "$DIALOG_STEP_TITLE - $DIALOG_SUBSTEP_TITLE" $PROGRESS_PERCENTAGE "We now create one partition, filling the whole device $INSTALL_DEVICE . This will be encrypted later."
+#  sgdisk --new=1:0:0 $INSTALL_DEVICE | \
+#    show_progress_box "$DIALOG_STEP_TITLE - $DIALOG_SUBSTEP_TITLE" $PROGRESS_PERCENTAGE "We now create one partition, filling the whole device $INSTALL_DEVICE . This will be encrypted later."
 fi
 
 
@@ -48,14 +45,14 @@ ls /sys/firmware/efi/efivars
 if [[ "$?" == "0" ]]
 then
   show_info_box "$DIALOG_STEP_TITLE - $DIALOG_SUBSTEP_TITLE" $PROGRESS_PERCENTAGE "Looks like you booted in EFI mode. Let's search for an EFI partition!"
-	efi_partition=$(fdisk --list -o device,type $USB_KEY | awk '/EFI/ { print $1 }')
-	if [ "$efi_partition" == "" ]
-	then
+  efi_partition=$(fdisk --list -o device,type $USB_KEY | awk '/EFI/ { print $1 }')
+  if [ "$efi_partition" == "" ]
+  then
     DIALOG_SUBSTEP_TITLE="Creating boot and EFI partitions"
     PROGRESS_PERCENTAGE=$(( PROGRESS_PERCENTAGE + 1 ))
 
-		# Wipe the selected disk
-		show_yesno_menu "$DIALOG_STEP_TITLE - $DIALOG_SUBSTEP_TITLE" $PROGRESS_PERCENTAGE "We did not found an existing EFI partition on the usb key $USB_KEY! We will wipe all data on it $USB_KEY. THIS CANNOT BE UNDONE! Is $USB_KEY correct?"
+    # Wipe the selected disk
+    show_yesno_menu "$DIALOG_STEP_TITLE - $DIALOG_SUBSTEP_TITLE" $PROGRESS_PERCENTAGE "We did not found an existing EFI partition on the usb key $USB_KEY! We will wipe all data on it $USB_KEY. THIS CANNOT BE UNDONE! Is $USB_KEY correct?"
     if [[ "$?" != "0" ]] 
     then
       echo "Aborting due to user interaction..."
@@ -86,7 +83,7 @@ EOF
     fi
   else
     show_info_box "$DIALOG_STEP_TITLE - $DIALOG_SUBSTEP_TITLE" $PROGRESS_PERCENTAGE "Found an existing EFI partition. Will use that!"
-	fi
+  fi
 else
   show_info_box "$DIALOG_STEP_TITLE - $DIALOG_SUBSTEP_TITLE" $PROGRESS_PERCENTAGE "Did not found efi vars. Let's assume you booted in legacy bios mode ..."
 fi
