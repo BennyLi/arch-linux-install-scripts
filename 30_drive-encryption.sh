@@ -17,6 +17,7 @@ encrypt_boot() {
     --verbose \
     --cipher $ENCRYPTION_TYPE \
     --key-size $ENCRYPTION_KEYSIZE \
+    --type luks1 \
     luksFormat $BOOT_PARTITION $ENCRYPTION_PASS_FILE | \
       show_progress_box "$DIALOG_STEP_TITLE - $DIALOG_SUBSTEP_TITLE" $PROGRESS_PERCENTAGE "Encrypting the usb boot partition ..."
 }
