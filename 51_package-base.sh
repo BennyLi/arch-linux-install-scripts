@@ -6,6 +6,7 @@ DIALOG_STEP_TITLE="Package installation"
 pacstrap /mnt/ \
   base base-devel \
   linux linux-firmware \
+  lvm2 \
   grub \
   wpa_supplicant dialog \
   intel-ucode \

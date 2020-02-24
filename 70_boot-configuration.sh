@@ -15,7 +15,7 @@ genfstab -p /mnt > /mnt/etc/fstab
 # Custom encrypt hook
 boot_device_id=$(ls -lth /dev/disk/by-id | grep -iP "$(basename $BOOT_PARTITION)" | awk '{print $9}')
 root_device_id=$(ls -lth /dev/disk/by-id | grep -iP "$(basename $ENCRYPTION_PARTITION)" | awk '{print $9}')
-cat << EOF > /etc/initcpio/hooks/detachedheader
+cat << EOF > /mnt/etc/initcpio/hooks/detachedheader
 #!/usr/bin/ash
 
 run_hook() {
@@ -36,7 +36,7 @@ run_hook() {
 }
 EOF
 
-cp /mnt/usr/lib/initcpio/install/encrypt /mnt/etc/initcpio/install/encrypt
+cp /mnt/usr/lib/initcpio/install/encrypt /mnt/etc/initcpio/install/detachedheader
 
 
 
