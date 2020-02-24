@@ -1,6 +1,16 @@
 #! /usr/bin/env sh
 
-# Get this script via https:/git.io/fhlfO
+# Get this script via https:/git.io/archLi
+
+if [ ! -d $(pwd)/.git ]
+then
+  if [ ! $(which git) ];
+  then
+    pacman -Sy --noconfirm git
+  fi
+  git clone https://github.com/BennyLi/arch-linux-install-scripts.git
+  cd arch-linux-install-scripts
+fi
 
 
 # Sources of this process:
