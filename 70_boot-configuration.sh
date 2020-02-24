@@ -4,8 +4,8 @@ header_file_name=$(basename $LUKS_ROOT_HEADER_FILE)
 mv $LUKS_ROOT_HEADER_FILE /mnt/boot
 chmod 400 /mnt/boot/$header_file_name
 
-key_file_name=$(basename $LUKS_BOOT_KEY_FILE)
-mv $LUKS_BOOT_KEY_FILE /mnt/boot
+key_file_name=$(basename $LUKS_ROOT_KEY_FILE)
+mv $LUKS_ROOT_KEY_FILE /mnt/boot
 chmod 400 /mnt/boot/$key_file_name
 
 genfstab -p /mnt > /mnt/etc/fstab
@@ -45,7 +45,8 @@ cp /mnt/usr/lib/initcpio/install/encrypt /mnt/etc/initcpio/install/detachedheade
 echo "Configuring bootmenu..."
 sed --in-place 's/^HOOKS=.*/HOOKS="base udev keyboard autodetect modconf block keymap detachedheader lvm2 filesystems fsck"/g' /mnt/etc/mkinitcpio.conf
 arch-chroot /mnt mkinitcpio --preset linux
-arch-chroot /mnt bootctl install
+
+mkdir --parent /mnt/boot/loader/entries
 
 cat <<EOF > /mnt/boot/loader/loader.conf
 default arch
@@ -54,7 +55,7 @@ editor  no
 console-mode max
 EOF
 
-lang_code_prefix="$(echo $LANG | sed --regexp-extended --quite 's/^(.*)_.*/\1/p')"
+lang_code_prefix="$(echo $LANG | sed --regexp-extended --quiet 's/^(.*)_.*/\1/p')"
 cat <<EOF > /mnt/boot/loader/entries/arch.conf
 title    Arch Linux
 linux    /vmlinuz-linux
@@ -79,6 +80,8 @@ Exec = /usr/bin/bootctl update
 EOF
 
 
+arch-chroot /mnt bootctl install
+
 
 ##### -----> GRUB SETUP
 arch-chroot /mnt \
@@ -87,7 +90,7 @@ arch-chroot /mnt \
 # Enable booting from LUKS encrypted devices
 sed --in-place \
     --expression="s/^#GRUB_ENABLE_CRYPTODISK/GRUB_ENABLE_CRYPTODISK/g" \
-    /etc/default/grub
+    /mnt/etc/default/grub
 
 arch-chroot /mnt \
   grub-mkconfig -o /boot/grub/grub.cfg

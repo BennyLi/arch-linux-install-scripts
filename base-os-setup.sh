@@ -10,6 +10,8 @@ then
   fi
   git clone https://github.com/BennyLi/arch-linux-install-scripts.git
   cd arch-linux-install-scripts
+  ./bash-os-setup.sh
+  exit 0
 fi
 
 
