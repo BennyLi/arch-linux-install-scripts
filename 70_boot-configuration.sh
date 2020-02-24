@@ -82,7 +82,7 @@ EOF
 
 ##### -----> GRUB SETUP
 arch-chroot /mnt \
-  grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB
+  grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB
 
 # Enable booting from LUKS encrypted devices
 sed --in-place \
