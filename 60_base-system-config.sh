@@ -8,7 +8,7 @@ show_info_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Now we will configure t
 echo $HOSTNAME > /mnt/etc/hostname
 
 echo "LANG=${LANG}" > /mnt/etc/locale.conf
-lang_code="$(echo $LANG | sed --extended-regexp --quiet 's/^(.*)\..*/\1/p')"
+lang_code="$(echo $LANG | sed --regexp-extended --quiet 's/^(.*)\..*/\1/p')"
 sed --in-place \
     --expression="s/^#en_US/en_US/g" \
     --expression="s/^#${lang_code}/${lang_code}/g" \
