@@ -7,7 +7,7 @@ pacstrap /mnt/ \
   base base-devel \
   linux linux-firmware \
   lvm2 \
-  grub \
+  grub efibootmgr \
   wpa_supplicant dialog \
   intel-ucode \
   git ansible \
