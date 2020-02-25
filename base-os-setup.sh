@@ -1,19 +1,4 @@
-#! /usr/bin/env zsh
-
-# Get this script via https:/git.io/archLi
-
-if [ ! -d $(pwd)/.git ]
-then
-  if [ ! $(which git) ];
-  then
-    pacman -Sy --noconfirm git
-  fi
-  git clone https://github.com/BennyLi/arch-linux-install-scripts.git
-  cd arch-linux-install-scripts
-  ./base-os-setup.sh
-  exit 0
-fi
-
+#! /usr/bin/env sh
 
 # Sources of this process:
 # * https://legacy.thomas-leister.de/arch-linux-luks-verschluesselt-auf-uefi-system-installieren-2/
