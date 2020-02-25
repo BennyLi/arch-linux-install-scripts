@@ -32,7 +32,7 @@ run_hook() {
     cryptsetup open /dev/disk/by-uuid/$boot_device_id $LUKS_BOOT_DEVICE_NAME
     mkdir -p /mnt
     mount /dev/mapper/$LUKS_BOOT_VOLUME_GROUP_NAME-boot /mnt
-    cryptsetup --header /mnt/$header_file_name --key-file=/mnt/$key_file_name --keyfile-size=$ENCRYPTION_KEYSIZE open /dev/disk/by-id/$root_device_id $LUKS_DEVICE_NAME
+    cryptsetup --header /mnt/$header_file_name --key-file=/mnt/$key_file_name --keyfile-size=$ENCRYPTION_KEYSIZE open $root_device_id $LUKS_DEVICE_NAME
     umount /mnt
 }
 EOF
