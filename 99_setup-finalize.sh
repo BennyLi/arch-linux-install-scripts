@@ -1,6 +1,7 @@
 #! /usr/bin/env sh
 
 umount /mnt/boot
+umount /mnt/efi
 umount /mnt
 
 echo "All done!"

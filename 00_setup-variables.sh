@@ -79,6 +79,9 @@ show_progress_box() {
            --ascii-lines \
            --programbox "\n$INFO_TEXT" \
            $DIALOG_HEIGHT $DIALOG_WIDTH
+  else
+    echo "$DIALOG_STEP_TITLE | $INFO_TEXT    (Total progress:  ${PROGRESS_PERCENTAGE}%)"
+    cat
   fi
 }
 
