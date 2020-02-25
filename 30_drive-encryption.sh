@@ -80,7 +80,7 @@ if [ "$DEBUG" == "true" ]
 then
   show_info_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "DEBUG is on, nothing will be done here yet ..."
 else
-  echo "$ENCRYPTION_PASSPHRASE" > $ENCRYPTION_PASS_FILE
+  echo -n "$ENCRYPTION_PASSPHRASE" > $ENCRYPTION_PASS_FILE
 
   if [[ "$USE_EXISTING_BOOT_PARTITION" == "true" ]] && [[ $(boot_exists) ]] && [[ $(open_boot) ]]
   then
