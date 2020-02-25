@@ -88,6 +88,4 @@ else
   show_info_box "$DIALOG_STEP_TITLE - $DIALOG_SUBSTEP_TITLE" $PROGRESS_PERCENTAGE "Did not found efi vars. Let's assume you booted in legacy bios mode ..."
 fi
 
-partprobe
-
 # vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2 number:

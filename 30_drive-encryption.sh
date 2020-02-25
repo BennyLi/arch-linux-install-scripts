@@ -9,6 +9,22 @@ ENCRYPTION_PASS_FILE="/tmp/enc.pass"
 modprobe dm-crypt
 
 
+boot_exists() {
+  efi_partition=$(fdisk --list -o device,type $USB_KEY | awk '/EFI/ { print $1 }')
+  if [[ "$efi_partition" != "" ]]
+  then
+    boot_partition=$(fdisk --list -o device,type $USB_KEY | awk '/Linux filesystem/ { print $1 }')
+    if [[ "$boot_partition" != "" ]]
+    then
+      echo "Partition that could contain boot found!"
+    else
+      exit 1
+    fi
+  else
+    exit 1
+  fi
+}
+
 encrypt_boot() {
   DIALOG_SUBSTEP_TITLE="Encrypt usb boot partition"
 
@@ -60,19 +76,24 @@ open_root() {
 }
 
 
-if [ "$DEBUG" == "true" ] 
+if [ "$DEBUG" == "true" ]
 then
   show_info_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "DEBUG is on, nothing will be done here yet ..."
 else
-  # TODO Check for existing boot and if boot is already encrypted 
-  echo "$ENCYPTION_PASSPHRASE" > $ENCRYPTION_PASS_FILE
-  encrypt_boot
-  PROGRESS_PERCENTAGE=$(( PROGRESS_PERCENTAGE + 1 ))
+  echo "$ENCRYPTION_PASSPHRASE" > $ENCRYPTION_PASS_FILE
+
+  if [[ "$USE_EXISTING_BOOT_PARTITION" == "true" ]] && [[ $(boot_exists) ]] && [[ $(open_boot) ]]
+  then
+    echo "Existing boot partition found and in use!"
+    PROGRESS_PERCENTAGE=$(( PROGRESS_PERCENTAGE + 1 ))
+  else
+    encrypt_boot
+    PROGRESS_PERCENTAGE=$(( PROGRESS_PERCENTAGE + 1 ))
+    open_boot
+    PROGRESS_PERCENTAGE=$(( PROGRESS_PERCENTAGE + 1 ))
+  fi
 
   encrypt_root
-  PROGRESS_PERCENTAGE=$(( PROGRESS_PERCENTAGE + 1 ))
-
-  open_boot
   PROGRESS_PERCENTAGE=$(( PROGRESS_PERCENTAGE + 1 ))
   open_root
 fi
