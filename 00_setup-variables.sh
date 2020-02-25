@@ -1,8 +1,7 @@
 #! /usr/bin/env sh
 
 DEBUG=false # if true no data will be changed
-# TODO
-VERBOSE=false # if true less dialogs are shown
+VERBOSE=false # if true more dialogs are shown
 
 KEYMAP="de-latin1-nodeadkeys"
 LANG="de_DE.UTF-8"
@@ -53,12 +52,17 @@ show_info_box() {
   local PROGRESS_PERCENTAGE="$2"
   local INFO_TEXT="$3"
 
-  dialog --backtitle "$DIALOG_BACKTITLE" \
-         --title "$DIALOG_STEP_TITLE (Total progress:  ${PROGRESS_PERCENTAGE}%)" \
-         --ascii-lines \
-         --infobox "\n$INFO_TEXT\n\n\n                       Press any key to continue..." \
-         $DIALOG_HEIGHT $DIALOG_WIDTH
-  read -n 1
+  if [[ "$VERBOSE" == "true" ]]
+  then
+    dialog --backtitle "$DIALOG_BACKTITLE" \
+           --title "$DIALOG_STEP_TITLE (Total progress:  ${PROGRESS_PERCENTAGE}%)" \
+           --ascii-lines \
+           --infobox "\n$INFO_TEXT\n\n\n                       Press any key to continue..." \
+           $DIALOG_HEIGHT $DIALOG_WIDTH
+    read -n 1
+  else
+    echo "$DIALOG_STEP_TITLE | $INFO_TEXT    (Total progress:  ${PROGRESS_PERCENTAGE}%)"
+  fi
 }
 
 show_progress_box() {
@@ -66,11 +70,14 @@ show_progress_box() {
   local PROGRESS_PERCENTAGE="$2"
   local INFO_TEXT="$3"
 
-  dialog --backtitle "$DIALOG_BACKTITLE" \
-         --title "$DIALOG_STEP_TITLE (Total progress:  ${PROGRESS_PERCENTAGE}%)" \
-         --ascii-lines \
-         --programbox "\n$INFO_TEXT" \
-         $DIALOG_HEIGHT $DIALOG_WIDTH
+  if [[ "$VERBOSE" == "true" ]]
+  then
+    dialog --backtitle "$DIALOG_BACKTITLE" \
+           --title "$DIALOG_STEP_TITLE (Total progress:  ${PROGRESS_PERCENTAGE}%)" \
+           --ascii-lines \
+           --programbox "\n$INFO_TEXT" \
+           $DIALOG_HEIGHT $DIALOG_WIDTH
+  fi
 }
 
 show_input_box() {
