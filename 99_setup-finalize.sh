@@ -4,7 +4,10 @@ umount /mnt/boot
 umount /mnt/efi
 umount /mnt
 
+swapoff --all
+
 vgchange -a n
+
 cryptsetup luksClose $LUKS_BOOT_DEVICE_NAME
 cryptsetup luksClose $LUKS_DEVICE_NAME
 
