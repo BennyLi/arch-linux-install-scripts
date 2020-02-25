@@ -1,4 +1,4 @@
-#! /usr/bin/env sh
+#! /usr/bin/env zsh
 
 # Get this script via https:/git.io/archLi
 
@@ -10,7 +10,7 @@ then
   fi
   git clone https://github.com/BennyLi/arch-linux-install-scripts.git
   cd arch-linux-install-scripts
-  ./bash-os-setup.sh
+  ./base-os-setup.sh
   exit 0
 fi
 
