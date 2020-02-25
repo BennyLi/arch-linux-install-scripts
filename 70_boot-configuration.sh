@@ -84,13 +84,13 @@ arch-chroot /mnt bootctl install
 
 
 ##### -----> GRUB SETUP
-arch-chroot /mnt \
-  grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB
-
 # Enable booting from LUKS encrypted devices
 sed --in-place \
     --expression="s/^#GRUB_ENABLE_CRYPTODISK/GRUB_ENABLE_CRYPTODISK/g" \
     /mnt/etc/default/grub
+
+arch-chroot /mnt \
+  grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB
 
 arch-chroot /mnt \
   grub-mkconfig -o /boot/grub/grub.cfg
