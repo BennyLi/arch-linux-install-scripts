@@ -21,8 +21,16 @@ get_dotfiles() {
 get_ansible_playbook() {
   DIALOG_SUBSTEP_TITLE="Get the Ansible playbook"
 
-  arch-chroot /mnt git clone $ANSIBLE_GIT_REPO_URL /home/$USERNAME/.ansible_playbook | \
-    show_progress_box "$DIALOG_STEP_TITLE - $DIALOG_SUBSTEP_TITLE" $PROGRESS_PERCENTAGE "Getting your ansible playbook ..."
+  if [[ -d $ANSIBLE_GIT_REPO_URL ]]
+  then
+    cp --recursive --verbose \
+      $ANSIBLE_GIT_REPO_URL \
+      /mnt/home/$USERNAME/.ansible_playbook | \
+        show_progress_box "$DIALOG_STEP_TITLE - $DIALOG_SUBSTEP_TITLE" $PROGRESS_PERCENTAGE "Copying local ansible playbook into place ..."
+  else
+    arch-chroot /mnt git clone $ANSIBLE_GIT_REPO_URL /home/$USERNAME/.ansible_playbook | \
+      show_progress_box "$DIALOG_STEP_TITLE - $DIALOG_SUBSTEP_TITLE" $PROGRESS_PERCENTAGE "Getting your ansible playbook from remote ..."
+  fi
 }
 
 set_ansible_vault_password() {

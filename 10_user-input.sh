@@ -96,7 +96,7 @@ get_dotfiles_repo_name() {
 }
 
 get_ansible_repo_url() {
-  ANSIBLE_GIT_REPO_URL=$(show_input_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Enter the URL to your ansible git repo:")
+  ANSIBLE_GIT_REPO_URL=$(show_input_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Enter the URL OR local path to your ansible git repo:")
 }
 
 
