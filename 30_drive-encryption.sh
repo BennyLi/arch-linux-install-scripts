@@ -82,9 +82,16 @@ then
 else
   echo -n "$ENCRYPTION_PASSPHRASE" > $ENCRYPTION_PASS_FILE
 
-  if [[ "$USE_EXISTING_BOOT_PARTITION" == "true" ]] && [[ $(boot_exists) ]] && [[ $(open_boot) ]]
+  if [[ "$USE_EXISTING_BOOT_PARTITION" == "true" ]]
   then
-    echo "Existing boot partition found and in use!"
+    $(open_boot)
+    if [[ "$?" != "0" ]]
+    then
+      show_info_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Could not open encrypted boot partition! Check if you\n * $BOOT_PARTITION is correct\n * The given passphrase is correct\n\nWill abort now! Please try again ..."
+      exit 1
+    else
+      show_info_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Existing boot partition found and in use!"
+    fi
     PROGRESS_PERCENTAGE=$(( PROGRESS_PERCENTAGE + 1 ))
   else
     encrypt_boot
