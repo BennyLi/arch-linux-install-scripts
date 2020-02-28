@@ -7,23 +7,25 @@ show_intro_screen() {
   show_info_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Next I will ask you for some variable data. Please provide each one as it will be set in the installation process for you."
 }
 
-
 get_hostname() {
   HOSTNAME=$(show_input_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Enter your hostname / machine name / name of your computer:")
 }
-
 
 get_username() {
   USERNAME=$(show_input_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Enter admin username:")
 }
 
+get_usergroup() {
+  USERGROUP=$(show_input_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Enter usergroup for $USERNAME:")
+}
+
 show_user_password_dialog() {
-  USER_PASSWORD=$(show_password_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Enter admin password:")
+  USER_PASSWORD=$(show_password_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Enter password for $USERNAME:")
 }
 
 confirm_user_password() {
   password_check="0"
-  password_check=$(show_password_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Enter admin password again:")
+  password_check=$(show_password_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Enter that password again:")
 
   if [[ "$USER_PASSWORD" != "$password_check" ]]
   then
@@ -88,14 +90,25 @@ get_encryption_password() {
   confirm_encryption_password
 }
 
+get_dotfiles_repo_name() {
+  GITHUB_DOTFILES_REPO=$(show_input_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Enter your GitHub dotfiles repo name [default: bennyli/dotfiles]:")
+  GITHUB_DOTFILES_REPO=${GITHUB_DOTFILES_REPO:-bennyli/dotfiles}
+}
 
-##### ----- MAIN FUNCTION
+get_ansible_repo_url() {
+  ANSIBLE_GIT_REPO_URL=$(show_input_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Enter the URL to your ansible git repo:")
+}
+
+
+##### -----> MAIN FUNCTION
 
 show_intro_screen
 
 while [[ "$HOSTNAME" == "" ]]; do get_hostname; done
 PROGRESS_PERCENTAGE=$((PROGRESS_PERCENTAGE + 1))
 while [[ "$USERNAME" == "" ]]; do get_username; done
+PROGRESS_PERCENTAGE=$((PROGRESS_PERCENTAGE + 1))
+while [[ "$USERGROUP" == "" ]]; do get_usergroup; done
 PROGRESS_PERCENTAGE=$((PROGRESS_PERCENTAGE + 1))
 while [[ "$USER_PASSWORD" == "" ]]; do get_user_password; done
 PROGRESS_PERCENTAGE=$((PROGRESS_PERCENTAGE + 1))
@@ -109,5 +122,10 @@ PROGRESS_PERCENTAGE=$((PROGRESS_PERCENTAGE + 1))
 show_usb_disk_info
 
 while [[ "$ENCRYPTION_PASSPHRASE" == "" ]]; do get_encryption_password; done
+PROGRESS_PERCENTAGE=$((PROGRESS_PERCENTAGE + 1))
+
+while [[ "$GITHUB_DOTFILES_REPO" == "" ]]; do get_dotfiles_repo_name; done
+PROGRESS_PERCENTAGE=$((PROGRESS_PERCENTAGE + 1))
+while [[ "$ANSIBLE_GIT_REPO_URL" == "" ]]; do get_ansible_repo_url; done
 
 # vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2 number:

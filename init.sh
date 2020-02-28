@@ -1,6 +1,7 @@
 #! /usr/bin/env zsh
 
-# Get this script via https:/git.io/archLi
+# Get this script via https://git.io/JvEbY
+# Execute curl -L https://git.io/JvEbY > init.sh && chmod +x init.sh && ./init.sh
 
 if [[ ! -d $(pwd)/.git ]]
 then

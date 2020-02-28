@@ -26,6 +26,7 @@ LUKS_VOLUME_GROUP_NAME="vg_main"
 # Variable that will be set in the setup process
 HOSTNAME=""
 USERNAME=""
+USERGROUP=""
 USER_PASSWORD=""
 
 INSTALL_DEVICE=""
@@ -34,6 +35,8 @@ USB_KEY=""
 EFI_PARTITION=""
 BOOT_PARTITION=""
 
+GITHUB_DOTFILES_REPO=""
+ANSIBLE_GIT_REPO_URL=""
 
 
 DIALOG_BACKTITLE="Arch Linux Setup"
