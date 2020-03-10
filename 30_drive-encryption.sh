@@ -53,6 +53,8 @@ encrypt_root() {
 
   dd if=/dev/urandom of=$LUKS_ROOT_HEADER_FILE bs=4M count=1
   dd if=/dev/urandom of=$LUKS_ROOT_KEY_FILE bs=$ENCRYPTION_KEYSIZE count=1
+  chmod "u=r,g=,o=" $LUKS_ROOT_HEADER_FILE
+  chmod "u=r,g=,o=" $LUKS_ROOT_KEY_FILE
 
   cryptsetup \
     --batch-mode \
