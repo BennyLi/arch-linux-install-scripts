@@ -62,12 +62,14 @@ get_usb_boot_device() {
 
   EFI_PARTITION="$(ls ${USB_KEY}* | grep -E "^${USB_KEY}p?1$")"
   EFI_PARTITION="${EFI_PARTITION:=${USB_KEY}1}"
-  BOOT_PARTITION="$(ls ${USB_KEY}* | grep -E "^${USB_KEY}p?2$")"
-  BOOT_PARTITION="${BOOT_PARTITION:=${USB_KEY}2}"
+  KEY_STORAGE_PARTITION="$(ls ${USB_KEY}* | grep -E "^${USB_KEY}p?2$")"
+  KEY_STORAGE_PARTITION="${KEY_STORAGE_PARTITION:=${USB_KEY}2}"
+  BOOT_PARTITION="$(ls ${USB_KEY}* | grep -E "^${USB_KEY}p?3$")"
+  BOOT_PARTITION="${BOOT_PARTITION:=${USB_KEY}3}"
 }
 
 show_usb_disk_info() {
-  show_info_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Excellent! You selected $USB_KEY as the device where the LUKS header and the boot partition will be stored on.\n\nTwo partitions are created later, if they do not already exists.\n  * The EFI system partition at $EFI_PARTITION\n  * The boot partition at $BOOT_PARTITION"
+  show_info_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Excellent! You selected $USB_KEY as the device where the LUKS header and the boot partition will be stored on.\n\nThree partitions are created later, if they do not already exists.\n  * The EFI system partition at $EFI_PARTITION\n  * The encrypted key storage partition at $KEY_STORAGE_PARTITION\n  * The encrypted boot partition at $BOOT_PARTITION"
 }
 
 show_encryption_password_dialog() {

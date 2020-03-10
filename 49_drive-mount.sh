@@ -14,6 +14,8 @@ mkdir /mnt/efi
 mount $EFI_PARTITION /mnt/efi
 mkdir /mnt/boot
 mount /dev/mapper/${LUKS_BOOT_VOLUME_GROUP_NAME}-boot /mnt/boot
+mkdir /mnt/key_storage
+mount /dev/mapper/${LUKS_KEY_STORAGE_VOLUME_GROUP_NAME}-key_storage /mnt/key_storage
 swapon /dev/mapper/${LUKS_VOLUME_GROUP_NAME}-swap
 EOF
 )

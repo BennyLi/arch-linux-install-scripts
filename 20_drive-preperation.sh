@@ -54,6 +54,7 @@ sgdisk --zap-all $USB_KEY
 sgdisk --mbrtogpt $USB_KEY
 sgdisk --new=0:0:512M --typecode=0:EF00 $USB_KEY
 mkfs.fat -F32 $EFI_PARTITION
+sgdisk --new=0:0:64M --typecode=0:8300 $USB_KEY
 sgdisk --new=0:0:0 --typecode=0:8300 $USB_KEY
 EOF
 )
@@ -83,7 +84,8 @@ search_efi_partition() {
 search_boot_partition() {
   DIALOG_SUBSTEP_TITLE="Search boot partition"
 
-  boot_partition=$(fdisk --list -o device,type $USB_KEY | awk '/Linux filesystem/ { print $1 }')
+  # Search for linux filesystem partitions with more than 100MB
+  boot_partition=$(fdisk --list -o device,type,sectors $USB_KEY | awk '/Linux filesystem/ { if ($4 > 4096000) { print $1 } }')
   if [ "$boot_partition" != "" ]
   then
     show_yesno_menu "$DIALOG_STEP_TITLE - $DIALOG_SUBSTEP_TITLE" $PROGRESS_PERCENTAGE "Found a potential (encrypted) boot partition at $boot_partition . Should I use that? Otherwise I will wipe the usb stick and create new partitions on it."

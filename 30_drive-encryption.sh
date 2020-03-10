@@ -13,7 +13,8 @@ boot_exists() {
   efi_partition=$(fdisk --list -o device,type $USB_KEY | awk '/EFI/ { print $1 }')
   if [[ "$efi_partition" != "" ]]
   then
-    boot_partition=$(fdisk --list -o device,type $USB_KEY | awk '/Linux filesystem/ { print $1 }')
+    # Search for linux filesystem partitions with more than 100MB
+    boot_partition=$(fdisk --list -o device,type,sectors $USB_KEY | awk '/Linux filesystem/ { if ($4 > 4096000) { print $1 } }')
     if [[ "$boot_partition" != "" ]]
     then
       echo "Partition that could contain boot found!"
@@ -23,6 +24,29 @@ boot_exists() {
   else
     exit 1
   fi
+}
+
+encrypt_key_storage() {
+  DIALOG_SUBSTEP_TITLE="Encrypt usb key storage partition"
+
+  cryptsetup \
+    --batch-mode \
+    --verbose \
+    --cipher $ENCRYPTION_TYPE \
+    --key-size $ENCRYPTION_KEYSIZE \
+    --type luks1 \
+    luksFormat $KEY_STORAGE_PARTITION $ENCRYPTION_PASS_FILE | \
+      show_progress_box "$DIALOG_STEP_TITLE - $DIALOG_SUBSTEP_TITLE" $PROGRESS_PERCENTAGE "Encrypting the usb key storage partition ..."
+}
+
+open_key_storage() {
+  DIALOG_SUBSTEP_TITLE="Open usb key storage partition"
+
+  cryptsetup luksOpen \
+    --key-file $ENCRYPTION_PASS_FILE \
+    $KEY_STORAGE_PARTITION \
+    $LUKS_KEY_STORAGE_DEVICE_NAME | \
+      show_progress_box "$DIALOG_STEP_TITLE - $DIALOG_SUBSTEP_TITLE" $PROGRESS_PERCENTAGE "Opening the encrypted usb key storage partition ..."
 }
 
 encrypt_boot() {
@@ -96,6 +120,10 @@ else
     fi
     PROGRESS_PERCENTAGE=$(( PROGRESS_PERCENTAGE + 1 ))
   else
+    encrypt_key_storage
+    PROGRESS_PERCENTAGE=$(( PROGRESS_PERCENTAGE + 1 ))
+    open_key_storage
+    PROGRESS_PERCENTAGE=$(( PROGRESS_PERCENTAGE + 1 ))
     encrypt_boot
     PROGRESS_PERCENTAGE=$(( PROGRESS_PERCENTAGE + 1 ))
     open_boot

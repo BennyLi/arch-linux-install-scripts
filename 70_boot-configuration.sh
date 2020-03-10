@@ -1,19 +1,19 @@
 #! /usr/bin/env sh
 
 header_file_name=$(basename $LUKS_ROOT_HEADER_FILE)
-mv $LUKS_ROOT_HEADER_FILE /mnt/boot
-chmod 400 /mnt/boot/$header_file_name
+mv $LUKS_ROOT_HEADER_FILE /mnt/key_storage
+chmod 400 /mnt/key_storage/$header_file_name
 
 key_file_name=$(basename $LUKS_ROOT_KEY_FILE)
-mv $LUKS_ROOT_KEY_FILE /mnt/boot
-chmod 400 /mnt/boot/$key_file_name
+mv $LUKS_ROOT_KEY_FILE /mnt/key_storage
+chmod 400 /mnt/key_storage/$key_file_name
 
 genfstab -U -p /mnt > /mnt/etc/fstab
 
 
 
 # Custom encrypt hook
-boot_device_id=$(ls -lth /dev/disk/by-uuid | grep -iP "$(basename $BOOT_PARTITION)" | awk '{print $9}')
+key_storage_device_id=$(ls -lth /dev/disk/by-uuid | grep -iP "$(basename $KEY_STORAGE_PARTITION)" | awk '{print $9}')
 # TODO As long as we do not use a partition here, we have to use the device path
 root_device_id=$ENCRYPTION_PARTITION
 cat << EOF > /mnt/etc/initcpio/hooks/detachedheader
@@ -24,14 +24,14 @@ run_hook() {
     #modprobe loop
     [ "${quiet}" = "y" ] && CSQUIET=">/dev/null"
 
-    while [ ! -L '/dev/disk/by-uuid/$boot_device_id' ]; do
+    while [ ! -L '/dev/disk/by-uuid/$key_storage_device_id' ]; do
      echo 'Waiting for USB'
-     sleep 3
+     sleep 2
     done
 
-    cryptsetup open /dev/disk/by-uuid/$boot_device_id $LUKS_BOOT_DEVICE_NAME
+    cryptsetup open /dev/disk/by-uuid/$key_storage_device_id $LUKS_KEY_STORAGE_DEVICE_NAME
     mkdir -p /mnt
-    mount /dev/mapper/$LUKS_BOOT_VOLUME_GROUP_NAME-boot /mnt
+    mount /dev/mapper/$LUKS_KEY_STORAGE_VOLUME_GROUP_NAME-key_storage /mnt
     cryptsetup --header /mnt/$header_file_name --key-file=/mnt/$key_file_name --keyfile-size=$ENCRYPTION_KEYSIZE open $root_device_id $LUKS_DEVICE_NAME
     umount /mnt
 }

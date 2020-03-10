@@ -1,5 +1,6 @@
 #! /usr/bin/env sh
 
+umount /mnt/key_storage
 umount /mnt/boot
 umount /mnt/efi
 umount /mnt
