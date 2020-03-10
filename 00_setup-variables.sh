@@ -1,7 +1,7 @@
 #! /usr/bin/env sh
 
 DEBUG=false # if true no data will be changed
-VERBOSE=false # if true more dialogs are shown
+VERBOSE=true # if true more dialogs are shown
 
 KEYMAP="de-latin1-nodeadkeys"
 LANG="de_DE.UTF-8"

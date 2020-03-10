@@ -104,9 +104,11 @@ search_or_create_usb_partitions() {
   DIALOG_SUBSTEP_TITLE="Searching existing boot and EFI partitions"
   show_info_box "$DIALOG_STEP_TITLE - $DIALOG_SUBSTEP_TITLE" $PROGRESS_PERCENTAGE "We will now search for existing partitions on the usb device."
 
-  search_efi_partition
-  PROGRESS_PERCENTAGE=$(( PROGRESS_PERCENTAGE + 1 ))
-  search_boot_partition
+  # TODO Does not work as expected...
+#  search_efi_partition
+#  PROGRESS_PERCENTAGE=$(( PROGRESS_PERCENTAGE + 1 ))
+#  search_boot_partition
+  partition_usb
 }
 
 
@@ -116,5 +118,8 @@ search_or_create_usb_partitions() {
 search_or_create_usb_partitions
 PROGRESS_PERCENTAGE=$(( PROGRESS_PERCENTAGE + 1 ))
 wipe_main_disk
+
+# Inform the kernel about the changes
+partprobe
 
 # vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2 number:
