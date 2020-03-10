@@ -11,13 +11,6 @@ show_intro_screen() {
 
 }
 
-get_dotfiles() {
-  DIALOG_SUBSTEP_TITLE="Get the dotfiles"
-
-  arch-chroot /mnt git clone https://github.com/${GITHUB_DOTFILES_REPO}.git /home/$USERNAME/.dotfiles | \
-    show_progress_box "$DIALOG_STEP_TITLE - $DIALOG_SUBSTEP_TITLE" $PROGRESS_PERCENTAGE "Getting your dotfiles ..."
-}
-
 get_ansible_playbook() {
   DIALOG_SUBSTEP_TITLE="Get the Ansible playbook"
 
@@ -59,8 +52,6 @@ EOF
 show_intro_screen
 PROGRESS_PERCENTAGE=$(( PROGRESS_PERCENTAGE + 1 ))
 
-get_dotfiles
-PROGRESS_PERCENTAGE=$(( PROGRESS_PERCENTAGE + 1 ))
 get_ansible_playbook
 PROGRESS_PERCENTAGE=$(( PROGRESS_PERCENTAGE + 1 ))
 set_ansible_vault_password
