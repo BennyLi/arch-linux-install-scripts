@@ -52,9 +52,9 @@ partition_usb() {
     done <<< $( cat << EOF
 sgdisk --zap-all $USB_KEY
 sgdisk --mbrtogpt $USB_KEY
-sgdisk --new=0:0:512M --typecode=0:EF00 $USB_KEY
+sgdisk --new=0:0:+512M --typecode=0:EF00 $USB_KEY
 mkfs.fat -F32 $EFI_PARTITION
-sgdisk --new=0:0:64M --typecode=0:8300 $USB_KEY
+sgdisk --new=0:0:+64M --typecode=0:8300 $USB_KEY
 sgdisk --new=0:0:0 --typecode=0:8300 $USB_KEY
 EOF
 )
