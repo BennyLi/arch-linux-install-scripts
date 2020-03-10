@@ -92,11 +92,6 @@ get_encryption_password() {
   confirm_encryption_password
 }
 
-get_dotfiles_repo_name() {
-  GITHUB_DOTFILES_REPO=$(show_input_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Enter your GitHub dotfiles repo name [default: bennyli/dotfiles]:")
-  GITHUB_DOTFILES_REPO=${GITHUB_DOTFILES_REPO:-bennyli/dotfiles}
-}
-
 get_ansible_repo_url() {
   ANSIBLE_GIT_REPO_URL=$(show_input_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Enter the URL OR local path to your ansible git repo:")
 }
@@ -126,8 +121,6 @@ show_usb_disk_info
 while [[ "$ENCRYPTION_PASSPHRASE" == "" ]]; do get_encryption_password; done
 PROGRESS_PERCENTAGE=$((PROGRESS_PERCENTAGE + 1))
 
-while [[ "$GITHUB_DOTFILES_REPO" == "" ]]; do get_dotfiles_repo_name; done
-PROGRESS_PERCENTAGE=$((PROGRESS_PERCENTAGE + 1))
 while [[ "$ANSIBLE_GIT_REPO_URL" == "" ]]; do get_ansible_repo_url; done
 
 # vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2 number:
