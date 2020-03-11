@@ -1,18 +1,31 @@
 #! /usr/bin/env sh
 
+PROGRESS_PERCENTAGE=70
+DIALOG_STEP_TITLE="Boot configuration"
+
+show_info_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Now the boot configuration will be setup."
+
 header_file_name=$(basename $LUKS_ROOT_HEADER_FILE)
-mv $LUKS_ROOT_HEADER_FILE /mnt/key_storage
+mv $LUKS_ROOT_HEADER_FILE /mnt/key_storage \
+  | show_progress_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Moving LUKS header file to the key storage partition ..."
 chmod 400 /mnt/key_storage/$header_file_name
+PROGRESS_PERCENTAGE=$(( PROGRESS_PERCENTAGE + 1 ))
 
 key_file_name=$(basename $LUKS_ROOT_KEY_FILE)
-mv $LUKS_ROOT_KEY_FILE /mnt/key_storage
+mv $LUKS_ROOT_KEY_FILE /mnt/key_storage \
+  | show_progress_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Moving LUKS key file to the key storage partition ..."
 chmod 400 /mnt/key_storage/$key_file_name
+PROGRESS_PERCENTAGE=$(( PROGRESS_PERCENTAGE + 1 ))
 
-genfstab -U -p /mnt > /mnt/etc/fstab
+genfstab -U -p /mnt > /mnt/etc/fstab \
+  | show_progress_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Generating fstab ..."
+PROGRESS_PERCENTAGE=$(( PROGRESS_PERCENTAGE + 1 ))
 
 
 
 # Custom encrypt hook
+show_info_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Next I will silently setup a custom encryption hook to open the main partition with the key file at boot time."
+
 key_storage_device_id=$(ls -lth /dev/disk/by-uuid | grep -iP "$(basename $KEY_STORAGE_PARTITION)" | awk '{print $9}')
 # TODO As long as we do not use a partition here, we have to use the device path
 root_device_id=$ENCRYPTION_PARTITION
@@ -38,14 +51,18 @@ run_hook() {
 EOF
 
 cp /mnt/usr/lib/initcpio/install/encrypt /mnt/etc/initcpio/install/detachedheader
+PROGRESS_PERCENTAGE=$(( PROGRESS_PERCENTAGE + 1 ))
 
 
 
 
 
-echo "Configuring bootmenu..."
 sed --in-place 's/^HOOKS=.*/HOOKS="base udev keyboard autodetect modconf block keymap detachedheader lvm2 filesystems fsck"/g' /mnt/etc/mkinitcpio.conf
-arch-chroot /mnt mkinitcpio --preset linux
+arch-chroot /mnt mkinitcpio --preset linux \
+  | show_progress_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Makeing initramfs ..."
+PROGRESS_PERCENTAGE=$(( PROGRESS_PERCENTAGE + 1 ))
+
+
 
 mkdir --parent /mnt/boot/loader/entries
 
@@ -81,7 +98,9 @@ Exec = /usr/bin/bootctl update
 EOF
 
 
-arch-chroot /mnt bootctl install
+arch-chroot /mnt bootctl install \
+  | show_progress_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Creating systemd bootloader configs ..."
+PROGRESS_PERCENTAGE=$(( PROGRESS_PERCENTAGE + 1 ))
 
 
 ##### -----> GRUB SETUP
@@ -90,10 +109,12 @@ sed --in-place \
     --expression="s/^#GRUB_ENABLE_CRYPTODISK/GRUB_ENABLE_CRYPTODISK/g" \
     /mnt/etc/default/grub
 
-arch-chroot /mnt \
-  grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB
+arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB \
+  | show_progress_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Installing GRUB bootloader ..."
+PROGRESS_PERCENTAGE=$(( PROGRESS_PERCENTAGE + 1 ))
 
-arch-chroot /mnt \
-  grub-mkconfig -o /boot/grub/grub.cfg
+arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg \
+  | show_progress_box "$DIALOG_STEP_TITLE" $PROGRESS_PERCENTAGE "Generating GRUB bootloader config ..."
+PROGRESS_PERCENTAGE=$(( PROGRESS_PERCENTAGE + 1 ))
 
 # vim: set tabstop=2 softtabstop=0 expandtab shiftwidth=2 number:

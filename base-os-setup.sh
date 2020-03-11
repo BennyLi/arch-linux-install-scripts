@@ -29,6 +29,8 @@ source ./61_user-setup.sh
 
 source ./70_boot-configuration.sh
 
+source ./80_advanced-user-installation.sh
+
 source ./99_setup-finalize.sh
 
 # vim: set tabstop=8 softtabstop=0 expandtab shiftwidth=4 smarttab
