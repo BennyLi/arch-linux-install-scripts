@@ -54,4 +54,4 @@ If you like my work feel free to bring some love back.
 
 - Give this repo a ⭐
 - Follow me on [GitHub](https://github.com/BennyLi) or [Twitter](https://twitter.com/BennyLindemann)
-- Drop some 💰 via [<img src="paypal-donate-button.png" alt="PayPal Donate Button" style="zoom: 25%;" />](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=L5FWZYAM5Y5A4&source=url)
+- Drop some 💰 via [<img src="paypal-donate-button.png" alt="PayPal Donate Button" style="height: 30px;" />](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=L5FWZYAM5Y5A4&source=url)
